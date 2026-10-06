@@ -1,0 +1,5 @@
+# Local environment files can contain credentials. Keep the checked-in templates.
+.env
+.env.*
+!.env.example
+!.env.docker.example

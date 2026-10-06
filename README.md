@@ -768,3 +768,33 @@ Memory Limit
       ↓
 Backend May Restart / Fail
 
+
+Docker Deployment (Local)
+
+The repository includes a Docker Compose setup for the React frontend, FastAPI backend, and PostgreSQL database. Docker Desktop (or Docker Engine with the Compose plugin) is required.
+
+1. Copy the environment template and configure your credentials:
+
+```powershell
+Copy-Item .env.docker.example .env
+```
+
+Set a strong `APP_SECRET` and `POSTGRES_PASSWORD` in `.env`. Add Cloudinary credentials for photo uploads and Google OAuth credentials if those features are needed.
+
+Docker Compose reads these values from the repository-root `.env`; it does not load `backend/.env`. In particular, Google OAuth needs `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `GOOGLE_REDIRECT_URI` in the root `.env`. The root `.gitignore` excludes local environment files so credentials are not committed.
+
+2. Build the images and start the services from the repository root:
+
+```powershell
+docker compose up --build
+```
+
+Frontend: http://localhost:3000
+
+Backend: http://localhost:8000
+
+The PostgreSQL data is stored in a named Docker volume. To stop the services, press Ctrl+C and run `docker compose down`. To also delete the database volume and its data, run `docker compose down -v`.
+
+For a hosted frontend, set `REACT_APP_API_URL` to the publicly reachable backend URL before building. The frontend API URL is compiled into the static frontend image at build time.
+
+docker compose --env-file backend/.env up -d
